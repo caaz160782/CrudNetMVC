@@ -1,4 +1,12 @@
+using CrudNetMVC.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+//inyeccion a conexion a bd 
+builder.Services.AddDbContext<ApplicationDbContext>(opciones =>
+    opciones.UseSqlServer(builder.Configuration.GetConnectionString("ConexionSql"))
+);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
