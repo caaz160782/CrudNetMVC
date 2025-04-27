@@ -13,10 +13,30 @@ namespace CrudNetMVC.Controllers
         {
             _context = context;
         }
-
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Contacto.ToListAsync());
+        }
+        
+        [HttpGet]
+        public IActionResult Crear()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Crear(Contacto contacto)
+        {
+            if (ModelState.IsValid)
+            {
+                contacto.FechaCreacion = DateTime.Now;
+                _context.Contacto.Add(contacto);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View();
         }
 
         public IActionResult Privacy()
