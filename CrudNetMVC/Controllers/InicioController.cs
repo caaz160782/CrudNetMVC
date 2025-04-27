@@ -27,17 +27,97 @@ namespace CrudNetMVC.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Crear(Contacto contacto)
+        public async Task<IActionResult> Crear(Contacto contacto)
         {
             if (ModelState.IsValid)
             {
                 contacto.FechaCreacion = DateTime.Now;
                 _context.Contacto.Add(contacto);
-                _context.SaveChanges();
+                await  _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View();
         }
+        
+        [HttpGet]
+        public IActionResult Editar(int id)
+        {
+            var contacto = _context.Contacto.FirstOrDefault(c => c.Id == id);
+            if (contacto == null)
+            {
+                return NotFound();
+            }
+            return View(contacto);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar(Contacto contacto)
+        {
+            if (ModelState.IsValid)
+            {
+                var contactoExistente = _context.Contacto.FirstOrDefault(c => c.Id == contacto.Id);
+                if (contactoExistente == null)
+                {
+                    return NotFound();
+                }
+
+                // Actualizamos los campos
+                contactoExistente.Nombre = contacto.Nombre;
+                contactoExistente.Telefono = contacto.Telefono;
+                contactoExistente.Celular = contacto.Celular;
+                contactoExistente.Email = contacto.Email;
+
+                _context.Update(contactoExistente);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Inicio"); // Regresa a la lista principal
+            }
+
+            return View(contacto); // Si hay error, regresa a la vista
+        }
+
+        // GET: Mostrar vista para confirmar eliminación
+        [HttpGet]
+        public IActionResult Eliminar(int id)
+        {
+            var contacto = _context.Contacto.FirstOrDefault(c => c.Id == id);
+            if (contacto == null)
+            {
+                return NotFound();
+            }
+
+            return View(contacto);
+        }
+
+        // POST: Confirmar y eliminar
+        [HttpPost, ActionName("Eliminar")]
+        [ValidateAntiForgeryToken]
+        public IActionResult EliminarConfirmado(int id)
+        {
+            var contacto = _context.Contacto.FirstOrDefault(c => c.Id == id);
+            if (contacto == null)
+            {
+                return NotFound();
+            }
+
+            _context.Contacto.Remove(contacto);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Inicio");
+        }
+
+        [HttpGet]
+        public IActionResult Detalle(int id)
+        {
+            var contacto = _context.Contacto.FirstOrDefault(c => c.Id == id);
+            if (contacto == null)
+            {
+                return NotFound();
+            }
+            return View(contacto);
+        }
+
 
         public IActionResult Privacy()
         {
