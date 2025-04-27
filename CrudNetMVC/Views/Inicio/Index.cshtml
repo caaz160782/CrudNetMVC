@@ -51,13 +51,15 @@
                                             <a asp-action="Detalle" asp-route-id="@item.Id" class="btn btn-secondary">
                                                 <i class="fa-solid fa-circle-info"></i>
                                             </a>
-
                                             <a asp-action="Editar"  asp-route-id="@item.Id" class="btn btn-warning">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
                                             <a asp-action="Eliminar"  asp-route-id="@item.Id" class="btn btn-danger">
                                                 <i class="fa-solid fa-trash"></i>
                                             </a>
+                                         <!--   <button class="btn btn-danger" onclick="confirmarEliminar(@item.Id)">
+                                                <i class="fa fa-trash"></i> Eliminar
+                                               </button>-->
                                     </td>
                                 </tr>    
                                 }
@@ -74,3 +76,23 @@
         </div>
     </div>
 </div>
+
+<script>
+   function confirmarEliminar(id) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redireccionar para eliminar
+                window.location.href = '/Inicio/Eliminar/' + id;
+            }
+        })
+    }
+</script>

@@ -1,0 +1,22 @@
+﻿@model CrudNetMVC.Models.Contacto
+
+@{
+    ViewData["Title"] = "Eliminar Contacto";
+}
+
+<h1 class="text-center text-danger">¿Seguro que deseas eliminar este contacto?</h1>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h4>Nombre: @Model.Nombre</h4>
+        <h4>Teléfono: @Model.Telefono</h4>
+        <h4>Celular: @Model.Celular</h4>
+        <h4>Email: @Model.Email</h4>
+
+        <form asp-action="Eliminar" method="post">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+            <a asp-action="Index" asp-controller="Inicio" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</div>
